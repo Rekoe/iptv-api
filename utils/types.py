@@ -1,6 +1,6 @@
-from typing import TypedDict, Literal, Union
+from typing import TypedDict, Literal, Union, NotRequired
 
-OriginType = Literal["live", "hls", "local", "whitelist", "subscribe", "hotel", "multicast", "online_search"]
+OriginType = Literal["hls", "local", "whitelist", "subscribe"]
 IPvType = Literal["ipv4", "ipv6", None]
 
 
@@ -11,10 +11,15 @@ class ChannelData(TypedDict):
     id: int
     url: str
     host: str
-    date: str | None
-    resolution: str | None
+    date: NotRequired[str | None]
+    resolution: NotRequired[str | None]
     origin: OriginType
     ipv_type: IPvType
+    location: NotRequired[str | None]
+    isp: NotRequired[str | None]
+    headers: NotRequired[dict[str, str] | None]
+    catchup: NotRequired[dict[str, str] | None]
+    extra_info: NotRequired[str]
 
 
 CategoryChannelData = dict[str, dict[str, list[ChannelData]]]
@@ -26,9 +31,11 @@ class TestResult(TypedDict):
     """
     speed: int | float | None
     delay: int | float | None
-    resolution: str | None
+    resolution: int | str | None
 
 
 TestResultCacheData = dict[str, list[TestResult]]
 
 ChannelTestResult = Union[ChannelData, TestResult]
+
+WhitelistMaps = tuple[dict[str, list[str]], dict[str, list[str]]]
